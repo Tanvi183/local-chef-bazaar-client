@@ -1,0 +1,12 @@
+.react-multiple-carousel__arrow {
+  background: rgba(198, 82, 255, 0.87) !important;
+}
+
+.react-multiple-carousel__arrow:hover {
+  background: rgba(198, 82, 255, 1) !important;
+}
+
+.react-multiple-carousel__arrow::before {
+  color: #fff !important;
+  font-size: 18px;
+}
