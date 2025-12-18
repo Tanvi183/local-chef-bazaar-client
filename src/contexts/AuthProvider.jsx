@@ -8,11 +8,11 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
+import Loading from "../components/Shared/Loading";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  //   console.log(user);
 
   // user registation function
   const registerUser = (email, password) => {
@@ -47,6 +47,10 @@ const AuthProvider = ({ children }) => {
       unSubscribe();
     };
   }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   const authInfo = {
     registerUser,

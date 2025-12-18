@@ -3,10 +3,12 @@ import { useState } from "react";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
 import logo from "../../assets/images/logo.png";
 import { ShoppingCart } from "lucide-react";
+import useAuth from "../../hooks/useAuth";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const user = null;
+  const { user, SignOut } = useAuth();
 
   const navLinkClass = ({ isActive }) =>
     `nav-link transition ${
@@ -36,6 +38,39 @@ const Navbar = () => {
       )}
     </>
   );
+
+  const handleLogOut = () => {
+    Swal.fire({
+      title: "Are you sure you want to log out?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        SignOut()
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Logged Out!",
+              text: "You have been successfully logged out.",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          })
+          .catch((error) => {
+            console.error("Logout Error:", error);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong during logout. Please try again.",
+            });
+          });
+      }
+    });
+  };
 
   return (
     <>
@@ -89,11 +124,17 @@ const Navbar = () => {
                   </Link>
                 </>
               ) : (
-                <button className="px-4 py-2 rounded-lg bg-red-500 text-white">
+                <button
+                  onClick={handleLogOut}
+                  className="px-4 py-2 bg-red-500 text-white cursor-pointer"
+                >
                   Logout
                 </button>
               )}
-              <Link to="/cart" className="relative">
+              <Link
+                // to="/cart"
+                className="relative"
+              >
                 <ShoppingCart className="text-xl text-gray-700" />
                 <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full px-1">
                   0
