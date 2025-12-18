@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import registerImg from "../../assets/images/register.png";
 import useTitle from "../../hooks/useTitle";
 import Swal from "sweetalert2";
@@ -7,22 +7,24 @@ import { useForm } from "react-hook-form";
 import { FaUser } from "react-icons/fa";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
+import useAxios from "../../hooks/useAxios";
+import Loading from "../../components/Shared/Loading";
 
 const Register = () => {
   useTitle("Registration");
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  // Store selected image preview
-  const [previewImg, setPreviewImg] = useState(null);
-  const { registerUser, updateUserProfile } = useAuth();
-
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
   } = useForm();
+
+  const navigate = useNavigate();
+  const axiosInstance = useAxios();
+
+  // Store selected image preview
+  const [previewImg, setPreviewImg] = useState(null);
+  const { registerUser, updateUserProfile, SignOut, loading } = useAuth();
 
   // Watch password match
   const password = watch("password", "");
@@ -35,38 +37,58 @@ const Register = () => {
     }
   };
 
-  const handleRegistation = async (data) => {
+  const handleRegistration = async (data) => {
     try {
       const profileImg = data.photo[0];
 
-      // 1. Register User
-      const result = await registerUser(data.email, data.password);
-      console.log("User registered:", result.user);
+      // Register User in Firebase
+      await registerUser(data.email, data.password);
 
-      // 2. Upload image to ImgBB
+      // Upload image to ImgBB
       const formData = new FormData();
       formData.append("image", profileImg);
 
       const image_API_URL = `https://api.imgbb.com/1/upload?key=${
         import.meta.env.VITE_image_host_key
       }`;
-
       const imgRes = await axios.post(image_API_URL, formData);
-
       const photoURL = imgRes.data.data.url;
-      console.log("Uploaded image URL:", photoURL);
 
-      // 3. Update Firebase profile
-      const userProfile = {
+      // Create user in DB
+      const userInfo = {
+        email: data.email,
         displayName: data.name,
         photoURL,
+        address: data.address,
+        status: "active",
       };
 
-      await updateUserProfile(userProfile);
-      // console.log("Profile updated");
+      let dbRes;
+      try {
+        dbRes = await axiosInstance.post("/users", userInfo);
+      } catch (err) {
+        if (err.response && err.response.status === 409) {
+          Swal.fire({ icon: "warning", title: "User already exists" });
+          return;
+        } else {
+          throw err;
+        }
+      }
 
-      // Navigate AFTER everything is done
-      navigate(location.state || "/login");
+      if (dbRes && dbRes.data.insertedId) {
+        await Swal.fire({
+          title: "Registration Successful!",
+          text: "Your account has been created. Please login.",
+          icon: "success",
+        });
+      }
+
+      // Update Firebase profile (optional)
+      await updateUserProfile({ displayName: data.name, photoURL });
+
+      // Redirect to login page
+      navigate("/login");
+      await SignOut();
     } catch (error) {
       Swal.fire({
         title: "Registration Failed",
@@ -76,6 +98,10 @@ const Register = () => {
       });
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <section className="py-24 flex items-center justify-center px-4">
@@ -108,7 +134,7 @@ const Register = () => {
             </div>
 
             <form
-              onSubmit={handleSubmit(handleRegistation)}
+              onSubmit={handleSubmit(handleRegistration)}
               className="space-y-5"
             >
               {/* Name */}

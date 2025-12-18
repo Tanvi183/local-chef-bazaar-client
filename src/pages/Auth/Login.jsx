@@ -4,6 +4,7 @@ import loginImg from "../../assets/images/login.png";
 import useTitle from "../../hooks/useTitle";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
+import Loading from "../../components/Shared/Loading";
 
 const Login = () => {
   useTitle("Login");
@@ -12,7 +13,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signInUser } = useAuth();
+  const { signInUser, loading } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -27,6 +28,10 @@ const Login = () => {
         console.log(error);
       });
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <section className="py-24 flex items-center justify-center px-4">
