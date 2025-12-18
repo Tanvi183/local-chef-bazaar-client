@@ -8,6 +8,8 @@ import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
 import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
 import Profile from "../pages/Dashboard/Profile/Profile";
+import AdminRoute from "./AdminRoute";
+import RoleRequests from "../pages/Dashboard/RoleRequest/RoleRequests";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +50,16 @@ const router = createBrowserRouter([
       {
         path: "my-profile",
         element: <Profile />,
+      },
+
+      // Admin Only Access
+      {
+        path: "role-requests",
+        element: (
+          <AdminRoute>
+            <RoleRequests />
+          </AdminRoute>
+        ),
       },
     ],
   },
