@@ -1,10 +1,32 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import loginImg from "../../assets/images/login.png";
 import useTitle from "../../hooks/useTitle";
+import { useForm } from "react-hook-form";
+import useAuth from "../../hooks/useAuth";
 
 const Login = () => {
   useTitle("Login");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const { signInUser } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogin = (data) => {
+    console.log("form data", data);
+    signInUser(data.email, data.password)
+      .then((result) => {
+        console.log(result.user);
+        navigate(location?.state || "/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <section className="py-24 flex items-center justify-center px-4">
@@ -23,7 +45,7 @@ const Login = () => {
               Sign In
             </h2>
 
-            <form className="space-y-5">
+            <form onSubmit={handleSubmit(handleLogin)} className="space-y-5">
               {/* Email */}
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-1">
@@ -31,9 +53,19 @@ const Login = () => {
                 </label>
                 <input
                   type="email"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "invalid email address",
+                    },
+                  })}
                   placeholder="Enter your email"
                   className="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
+                {errors.email && (
+                  <span className="text-red-500">{errors.email.message}</span>
+                )}
               </div>
 
               {/* Password */}
@@ -43,9 +75,19 @@ const Login = () => {
                 </label>
                 <input
                   type="password"
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters long",
+                    },
+                  })}
                   placeholder="Enter your password"
                   className="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
+                {errors.password && (
+                  <p className="text-red-500">{errors.password.message}</p>
+                )}
               </div>
 
               {/* Submit */}

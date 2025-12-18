@@ -1,10 +1,81 @@
-import React from "react";
-import { Link } from "react-router";
+import React, { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 import registerImg from "../../assets/images/register.png";
 import useTitle from "../../hooks/useTitle";
+import Swal from "sweetalert2";
+import { useForm } from "react-hook-form";
+import { FaUser } from "react-icons/fa";
+import useAuth from "../../hooks/useAuth";
+import axios from "axios";
 
 const Register = () => {
   useTitle("Registration");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Store selected image preview
+  const [previewImg, setPreviewImg] = useState(null);
+  const { registerUser, updateUserProfile } = useAuth();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm();
+
+  // Watch password match
+  const password = watch("password", "");
+
+  // Handle image selection
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPreviewImg(URL.createObjectURL(file));
+    }
+  };
+
+  const handleRegistation = async (data) => {
+    try {
+      const profileImg = data.photo[0];
+
+      // 1. Register User
+      const result = await registerUser(data.email, data.password);
+      console.log("User registered:", result.user);
+
+      // 2. Upload image to ImgBB
+      const formData = new FormData();
+      formData.append("image", profileImg);
+
+      const image_API_URL = `https://api.imgbb.com/1/upload?key=${
+        import.meta.env.VITE_image_host_key
+      }`;
+
+      const imgRes = await axios.post(image_API_URL, formData);
+
+      const photoURL = imgRes.data.data.url;
+      console.log("Uploaded image URL:", photoURL);
+
+      // 3. Update Firebase profile
+      const userProfile = {
+        displayName: data.name,
+        photoURL,
+      };
+
+      await updateUserProfile(userProfile);
+      // console.log("Profile updated");
+
+      // Navigate AFTER everything is done
+      navigate(location.state || "/login");
+    } catch (error) {
+      Swal.fire({
+        title: "Registration Failed",
+        text: error.message || "Something went wrong!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+  };
 
   return (
     <section className="py-24 flex items-center justify-center px-4">
@@ -23,7 +94,23 @@ const Register = () => {
               Create Account
             </h2>
 
-            <form className="space-y-5">
+            {/* Profile Icon */}
+            <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-6">
+              {previewImg ? (
+                <img
+                  src={previewImg}
+                  alt="profile"
+                  className="w-full h-full object-cover rounded-full"
+                />
+              ) : (
+                <FaUser className="text-gray-600" />
+              )}
+            </div>
+
+            <form
+              onSubmit={handleSubmit(handleRegistation)}
+              className="space-y-5"
+            >
               {/* Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-1">
@@ -31,9 +118,19 @@ const Register = () => {
                 </label>
                 <input
                   type="text"
+                  {...register("name", {
+                    required: "Name is required",
+                    maxLength: {
+                      value: 20,
+                      message: "Name cannot be longer than 20 characters",
+                    },
+                  })}
                   placeholder="Enter your name"
                   className="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
+                {errors.name && (
+                  <span className="text-red-500">{errors.name.message}</span>
+                )}
               </div>
 
               {/* Email */}
@@ -43,21 +140,36 @@ const Register = () => {
                 </label>
                 <input
                   type="email"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "invalid email address",
+                    },
+                  })}
                   placeholder="Enter your email"
                   className="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
+                {errors.email && (
+                  <span className="text-red-500">{errors.email.message}</span>
+                )}
               </div>
 
               {/* Profile Image */}
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Profile Image URL
+                <label className="block text-sm font-medium mb-1">
+                  Profile Image
                 </label>
                 <input
-                  type="text"
-                  placeholder="Paste image URL"
-                  className="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  type="file"
+                  accept="image/*"
+                  {...register("photo", { required: "image is required" })}
+                  onChange={handleImageChange}
+                  className="file-input file-input-accent w-full border border-gray-300 rounded-md"
                 />
+                {errors.photo && (
+                  <span className="text-red-500">{errors.photo.message}</span>
+                )}
               </div>
 
               {/* Address */}
@@ -67,9 +179,15 @@ const Register = () => {
                 </label>
                 <input
                   type="text"
+                  {...register("address", {
+                    required: "Address is required",
+                  })}
                   placeholder="Enter your address"
                   className="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
+                {errors.address && (
+                  <p className="text-red-500">{errors.address.message}</p>
+                )}
               </div>
 
               {/* Password */}
@@ -79,9 +197,19 @@ const Register = () => {
                 </label>
                 <input
                   type="password"
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters long",
+                    },
+                  })}
                   placeholder="Enter password"
                   className="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
+                {errors.password && (
+                  <p className="text-red-500">{errors.password.message}</p>
+                )}
               </div>
 
               {/* Confirm Password */}
@@ -91,9 +219,19 @@ const Register = () => {
                 </label>
                 <input
                   type="password"
+                  {...register("confirmPassword", {
+                    required: "Please confirm your password",
+                    validate: (value) =>
+                      value === password || "Passwords do not match",
+                  })}
                   placeholder="Confirm password"
                   className="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
+                {errors.confirmPassword && (
+                  <p className="text-red-500">
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
               </div>
 
               {/*User Status */}
