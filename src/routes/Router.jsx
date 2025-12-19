@@ -10,6 +10,11 @@ import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
 import Profile from "../pages/Dashboard/Profile/Profile";
 import AdminRoute from "./AdminRoute";
 import RoleRequests from "../pages/Dashboard/RoleRequest/RoleRequests";
+import CreateMeal from "../pages/Meals/CreateMeal";
+import ChefRoute from "./ChefRoute";
+import MyMeals from "../pages/Meals/MyMeals";
+import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
+import FraudRoute from "./FraudRoute";
 
 const router = createBrowserRouter([
   {
@@ -59,6 +64,34 @@ const router = createBrowserRouter([
           <AdminRoute>
             <RoleRequests />
           </AdminRoute>
+        ),
+      },
+      {
+        path: "manage-users",
+        element: (
+          <AdminRoute>
+            <ManageUsers />
+          </AdminRoute>
+        ),
+      },
+
+      // Chef Only Access
+      {
+        path: "meal-add",
+        element: (
+          <ChefRoute>
+            <FraudRoute>
+              <CreateMeal />
+            </FraudRoute>
+          </ChefRoute>
+        ),
+      },
+      {
+        path: "my-meals",
+        element: (
+          <ChefRoute>
+            <MyMeals />
+          </ChefRoute>
         ),
       },
     ],

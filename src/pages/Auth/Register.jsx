@@ -37,24 +37,44 @@ const Register = () => {
     }
   };
 
+  function firebaseErrorMessage(error) {
+    switch (error.code) {
+      case "auth/email-already-in-use":
+        return "This email is already registered. Please login instead.";
+      case "auth/invalid-email":
+        return "The email address is not valid.";
+      case "auth/weak-password":
+        return "Password is too weak. It should be at least 6 characters.";
+      case "auth/user-not-found":
+        return "No user found with this email.";
+      case "auth/wrong-password":
+        return "Incorrect password. Please try again.";
+      case "auth/too-many-requests":
+        return "Too many attempts. Please try again later.";
+      default:
+        return "Something went wrong. Please try again.";
+    }
+  }
+
   const handleRegistration = async (data) => {
     try {
       const profileImg = data.photo[0];
 
-      // Register User in Firebase
+      // 1. Register user in Firebase
       await registerUser(data.email, data.password);
 
-      // Upload image to ImgBB
+      // 2. Upload image
       const formData = new FormData();
       formData.append("image", profileImg);
 
       const image_API_URL = `https://api.imgbb.com/1/upload?key=${
         import.meta.env.VITE_image_host_key
       }`;
+
       const imgRes = await axios.post(image_API_URL, formData);
       const photoURL = imgRes.data.data.url;
 
-      // Create user in DB
+      // 3. Save user in DB
       const userInfo = {
         email: data.email,
         displayName: data.name,
@@ -63,38 +83,35 @@ const Register = () => {
         status: "active",
       };
 
-      let dbRes;
-      try {
-        dbRes = await axiosInstance.post("/users", userInfo);
-      } catch (err) {
-        if (err.response && err.response.status === 409) {
-          Swal.fire({ icon: "warning", title: "User already exists" });
-          return;
-        } else {
-          throw err;
-        }
-      }
+      await axiosInstance.post("/users", userInfo);
 
-      if (dbRes && dbRes.data.insertedId) {
-        await Swal.fire({
-          title: "Registration Successful!",
-          text: "Your account has been created. Please login.",
-          icon: "success",
-        });
-      }
+      // 4. Update profile
+      await updateUserProfile({
+        displayName: data.name,
+        photoURL,
+      });
 
-      // Update Firebase profile (optional)
-      await updateUserProfile({ displayName: data.name, photoURL });
+      // 5. Success
+      await Swal.fire({
+        icon: "success",
+        title: "Registration Successful!",
+        text: "Please login to continue.",
+      });
 
-      // Redirect to login page
-      navigate("/login");
       await SignOut();
+      navigate("/login");
     } catch (error) {
+      // console.error(error);
+
+      // If it's a Firebase error
+      const message = error.code
+        ? firebaseErrorMessage(error)
+        : error?.response?.data?.message || "Something wrong";
+
       Swal.fire({
-        title: "Registration Failed",
-        text: error.message || "Something went wrong!",
         icon: "error",
-        confirmButtonText: "OK",
+        title: "Registration Failed",
+        text: message,
       });
     }
   };

@@ -1,12 +1,14 @@
 import React from "react";
 import { Link, NavLink, Outlet } from "react-router";
-import { FaUserAlt } from "react-icons/fa";
+import { FaUserAlt, FaUsersCog } from "react-icons/fa";
 import logoImg from "../assets/images/logo.png";
-import { MdDashboardCustomize, MdGroups } from "react-icons/md";
+import { MdDashboardCustomize, MdGroups, MdFoodBank } from "react-icons/md";
 import useRole from "../hooks/useRole";
+import { GiMeal } from "react-icons/gi";
 
 const DashboardLayout = () => {
-  const { role } = useRole();
+  const { role, status } = useRole();
+  // console.log(status);
 
   return (
     <div className="drawer lg:drawer-open">
@@ -123,6 +125,73 @@ const DashboardLayout = () => {
                     <span className="is-drawer-close:hidden">
                       Manage request
                     </span>
+                  </NavLink>
+                </li>
+
+                <li>
+                  <NavLink
+                    to="/dashboard/manage-users"
+                    end
+                    data-tip="Manage Users"
+                    className={({ isActive }) =>
+                      `
+      is-drawer-close:tooltip 
+      is-drawer-close:tooltip-right
+      flex items-center gap-3
+      ${isActive ? "bg-primary text-white" : ""}
+      `
+                    }
+                  >
+                    <FaUsersCog />
+                    <span className="is-drawer-close:hidden">Manage Users</span>
+                  </NavLink>
+                </li>
+              </>
+            )}
+
+            {/* chef only links */}
+
+            {role === "chef" && (
+              <>
+                {status !== "fraud" && (
+                  <li>
+                    <NavLink
+                      to="/dashboard/meal-add"
+                      end
+                      data-tip="Create meal "
+                      className={({ isActive }) =>
+                        `
+      is-drawer-close:tooltip 
+      is-drawer-close:tooltip-right
+      flex items-center gap-3
+      ${isActive ? "bg-primary text-white" : ""}
+      `
+                      }
+                    >
+                      <GiMeal />
+                      <span className="is-drawer-close:hidden">
+                        Create meal
+                      </span>
+                    </NavLink>
+                  </li>
+                )}
+
+                <li>
+                  <NavLink
+                    to="/dashboard/my-meals"
+                    end
+                    data-tip="My Meals"
+                    className={({ isActive }) =>
+                      `
+      is-drawer-close:tooltip 
+      is-drawer-close:tooltip-right
+      flex items-center gap-3
+      ${isActive ? "bg-primary text-white" : ""}
+      `
+                    }
+                  >
+                    <MdFoodBank />
+                    <span className="is-drawer-close:hidden"> My Meals</span>
                   </NavLink>
                 </li>
               </>
