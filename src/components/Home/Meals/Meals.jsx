@@ -1,61 +1,33 @@
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import useAxios from "../../../hooks/useAxios";
+import useAuth from "../../../hooks/useAuth";
+import { useNavigate } from "react-router";
 
 const Meals = () => {
-  const meals = [
-    {
-      id: 1,
-      title: "Sloppy BBQ Cottage Cheese Burger",
-      image: "https://source.unsplash.com/600x400/?burger,cheese",
-      description:
-        "Crumpled cottage cheese, caramelized onions, jalapeno, homemade mayonnaise",
-      rating: 5,
-      price: "৳360",
+  const { user } = useAuth();
+  const axiosInstance = useAxios();
+  const navigate = useNavigate();
+
+  // meal data fetch
+  const { data: meals = [] } = useQuery({
+    queryKey: ["home-meals"],
+    queryFn: async () => {
+      const res = await axiosInstance.get("/meals/home");
+      return res.data;
     },
-    {
-      id: 2,
-      title: "Cheese and Bacon Burger",
-      image: "https://source.unsplash.com/600x400/?bacon,burger",
-      description:
-        "Juicy beef patty, crispy bacon, cheddar cheese, lettuce, and special sauce",
-      rating: 4.6,
-      price: "৳420",
-    },
-    {
-      id: 3,
-      title: "Veggie Delight Burger",
-      image: "https://source.unsplash.com/600x400/?veggie,burger",
-      description: "Grilled vegetables, hummus, and fresh greens in a soft bun",
-      rating: 4.3,
-      price: "৳280",
-    },
-    {
-      id: 4,
-      title: "Chicken BBQ Burger",
-      image: "https://source.unsplash.com/600x400/?chicken,burger",
-      description:
-        "Grilled chicken patty, BBQ sauce, crispy onions, and pickles",
-      rating: 4.8,
-      price: "৳390",
-    },
-    {
-      id: 5,
-      title: "Double Cheese Beef Burger",
-      image: "https://source.unsplash.com/600x400/?double,cheeseburger",
-      description:
-        "Double beef patty, melted mozzarella, cheddar cheese, and house sauce",
-      rating: 4.7,
-      price: "৳480",
-    },
-    {
-      id: 6,
-      title: "Spicy Chicken Zinger Burger",
-      image: "https://source.unsplash.com/600x400/?spicy,chicken,burger",
-      description:
-        "Crispy spicy chicken fillet, lettuce, jalapeno mayo, and soft bun",
-      rating: 4.5,
-      price: "৳350",
-    },
-  ];
+  });
+
+  const handleSeeDetails = (mealId) => {
+    // console.log(mealId);
+    if (user) {
+      navigate(`/meals/${mealId}`);
+    } else {
+      navigate("/login");
+    }
+  };
+
+  // console.log(meals);
 
   return (
     <section className="bg-gray-50 py-16">
@@ -65,14 +37,14 @@ const Meals = () => {
           {meals.map((meal) => (
             <div
               key={meal.id}
-              className="group bg-white rounded-xl shadow-md overflow-hidden 
+              className="group bg-white rounded-md shadow-md overflow-hidden 
              transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
             >
               {/* Image Wrapper */}
               <div className="overflow-hidden">
                 <img
-                  src={meal.image}
-                  alt={meal.title}
+                  src={meal.foodImage}
+                  alt={meal.foodName}
                   className="w-full h-48 object-cover 
                  transition-transform duration-500 ease-out
                  group-hover:scale-110"
@@ -82,11 +54,12 @@ const Meals = () => {
               {/* Content */}
               <div className="p-4">
                 <h2 className="text-lg font-semibold text-gray-800">
-                  {meal.title}
+                  {meal.foodName}
                 </h2>
 
                 <p className="text-sm text-gray-500 mt-1 line-clamp-2">
-                  {meal.description}
+                  <strong>Ingredients: </strong>
+                  {meal.ingredients.join(", ")}
                 </p>
 
                 {/* Rating */}
@@ -98,15 +71,16 @@ const Meals = () => {
                 {/* Price & Button */}
                 <div className="flex items-center justify-between mt-4">
                   <span className="text-xl font-bold text-gray-800">
-                    {meal.price}
+                    $ {meal.price}
                   </span>
 
                   <button
+                    onClick={() => handleSeeDetails(meal._id)}
                     className="px-4 py-2 text-sm font-medium text-white 
-                   bg-green-500 rounded-lg 
-                   transition hover:bg-green-600"
+                   bg-lime-600
+                   transition hover:bg-lime-700 cursor-pointer"
                   >
-                    Add to cart
+                    See Details
                   </button>
                 </div>
               </div>

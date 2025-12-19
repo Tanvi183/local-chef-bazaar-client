@@ -30,7 +30,7 @@ const Meals = () => {
   );
 
   const handleSeeDetails = (mealId) => {
-    console.log(mealId);
+    // console.log(mealId);
 
     if (user) {
       navigate(`/meals/${mealId}`);
