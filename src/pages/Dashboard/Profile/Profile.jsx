@@ -26,16 +26,16 @@ const Profile = () => {
     photoURL,
     address,
     role = "user",
-    status = "active", // active | fraud
+    status = "active",
     chefId,
   } = profileData;
 
-  // Handle Role request
+  // Handle Role
   const handleRoleRequest = async (requestType) => {
     const requestData = {
       userName: displayName,
       userEmail: email,
-      requestType, // chef | admin
+      requestType,
       requestStatus: "pending",
       requestTime: new Date().toISOString(),
     };
@@ -141,7 +141,6 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* want to change role type */}
           <div className="mt-6 flex flex-wrap gap-3">
             {role === "user" && (
               <button

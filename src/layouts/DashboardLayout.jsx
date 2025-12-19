@@ -2,9 +2,15 @@ import React from "react";
 import { Link, NavLink, Outlet } from "react-router";
 import { FaUserAlt, FaUsersCog } from "react-icons/fa";
 import logoImg from "../assets/images/logo.png";
-import { MdDashboardCustomize, MdGroups, MdFoodBank } from "react-icons/md";
+import {
+  MdDashboardCustomize,
+  MdGroups,
+  MdFoodBank,
+  MdFavorite,
+} from "react-icons/md";
 import useRole from "../hooks/useRole";
 import { GiMeal } from "react-icons/gi";
+import { FaComment } from "react-icons/fa6";
 
 const DashboardLayout = () => {
   const { role, status } = useRole();
@@ -192,6 +198,49 @@ const DashboardLayout = () => {
                   >
                     <MdFoodBank />
                     <span className="is-drawer-close:hidden"> My Meals</span>
+                  </NavLink>
+                </li>
+              </>
+            )}
+
+            {/* user links */}
+            {role === "user" && (
+              <>
+                <li>
+                  <NavLink
+                    to="/dashboard/my-reviews"
+                    end
+                    data-tip="My Reviews"
+                    className={({ isActive }) =>
+                      `
+      is-drawer-close:tooltip 
+      is-drawer-close:tooltip-right
+      flex items-center gap-3
+      ${isActive ? "bg-primary text-white" : ""}
+      `
+                    }
+                  >
+                    <FaComment />
+                    <span className="is-drawer-close:hidden">My Reviews</span>
+                  </NavLink>
+                </li>
+
+                <li>
+                  <NavLink
+                    to="/dashboard/my-favorites"
+                    end
+                    data-tip="My Favorites"
+                    className={({ isActive }) =>
+                      `
+      is-drawer-close:tooltip 
+      is-drawer-close:tooltip-right
+      flex items-center gap-3
+      ${isActive ? "bg-primary text-white" : ""}
+      `
+                    }
+                  >
+                    <MdFavorite />
+                    <span className="is-drawer-close:hidden">My Favorites</span>
                   </NavLink>
                 </li>
               </>

@@ -16,6 +16,8 @@ import MyMeals from "../pages/Meals/MyMeals";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 import FraudRoute from "./FraudRoute";
 import MealDetails from "../pages/Meals/MealDetails";
+import MyReviews from "../pages/Dashboard/My Reviews/MyReviews";
+import FavoritesPage from "../pages/Dashboard/FavoritesPage/FavoritesPage";
 
 const router = createBrowserRouter([
   {
@@ -64,6 +66,14 @@ const router = createBrowserRouter([
       {
         path: "my-profile",
         element: <Profile />,
+      },
+      {
+        path: "my-reviews",
+        element: <MyReviews />,
+      },
+      {
+        path: "my-favorites",
+        element: <FavoritesPage />,
       },
 
       // Admin Only Access

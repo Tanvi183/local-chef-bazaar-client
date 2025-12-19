@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router";
+import { useParams } from "react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FaDollarSign } from "react-icons/fa";
@@ -6,68 +6,91 @@ import Loading from "../../components/Shared/Loading";
 import useTitle from "../../hooks/useTitle";
 import useAuth from "../../hooks/useAuth";
 import useAxios from "../../hooks/useAxios";
+import toast from "react-hot-toast";
+import { IoMdStar } from "react-icons/io";
+import { MdFavorite } from "react-icons/md";
 
 const MealDetails = () => {
   useTitle("Meal Details");
+
   const { id } = useParams();
-  const navigate = useNavigate();
   const { user } = useAuth();
   const axiosInstance = useAxios();
 
-  const [reviews, setReviews] = useState([]);
-  const [reviewText, setReviewText] = useState("");
+  const [comment, setComment] = useState("");
+  const [rating, setRating] = useState();
 
-  // Fetch meal details
-  // const { data } = useQuery(
-  //   ["meal"],
-  //   async () => {
-  //     const res = await axiosInstance.get(`/meals/${id}`);
-  //     return res.data.meal;
-  //   },
-  //   {
-  //     staleTime: 5 * 60 * 1000, // 5 minutes cache
-  //     onSuccess: (meal) => {
-  //       setReviews(meal.reviews || []);
-  //     },
-  //   }
-  // );
-
-  const { data: meal = [], isLoading } = useQuery({
-    queryKey: ["all-meals", id],
+  // Fetch Meal Details
+  const { data: meal, isLoading } = useQuery({
+    queryKey: ["meal", id],
     queryFn: async () => {
       const res = await axiosInstance.get(`/meals/${id}`);
       return res.data.meal;
     },
   });
 
-  // console.log(meal);
-
-  if (isLoading) return <Loading />;
-
-  // Submit review
+  // Add Review
   const handleAddReview = async () => {
-    if (!reviewText) return;
-
-    const newReview = {
-      user: user.displayName || "Anonymous",
-      comment: reviewText,
-      rating: 5,
-      date: new Date().toISOString(),
-    };
+    if (!comment || rating === 0) {
+      toast.error("Please give rating and comment");
+      return;
+    }
+    // console.log(comment, rating);
 
     try {
-      await axiosInstance.patch(`/meals/${meal._id}/review`, newReview);
-      setReviews([newReview, ...reviews]);
-      setReviewText("");
+      const res = await axiosInstance.post(`/meals/${id}/review`, {
+        userEmail: user.email,
+        reviewerName: user.displayName,
+        reviewerImage: user.photoURL,
+        rating,
+        comment,
+      });
+
+      if (res.data.success) {
+        toast.success("Review submitted successfully!");
+        setComment("");
+        refetchReviews();
+      }
     } catch (err) {
-      console.error(err);
+      toast.error(err.response?.data?.message || "Review failed");
     }
   };
+
+  // Fetch Reviews
+  const { data: reviews = [], refetch: refetchReviews } = useQuery({
+    queryKey: ["reviews", id],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/meals/${id}/reviews`);
+      return res.data.reviews;
+    },
+  });
+
+  // Add Favorite
+  const handleAddFavorite = async () => {
+    try {
+      const res = await axiosInstance.post("/favorites", {
+        userEmail: user.email,
+        mealId: meal._id,
+        mealName: meal.foodName,
+        chefId: meal.chefId,
+        chefName: meal.chefName,
+        price: meal.price,
+      });
+
+      if (res.data.success) {
+        toast.success("Added to favorites!");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Already in favorites");
+    }
+  };
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="bg-gray-50 py-16">
       <section className="max-w-7xl mx-auto px-4">
-        {/* Meal Header */}
+        {/* Meal Details */}
         <div className="flex flex-col md:flex-row gap-10 mb-8">
           <img
             src={meal.foodImage}
@@ -76,37 +99,43 @@ const MealDetails = () => {
           />
 
           <div className="flex-1 space-y-4">
-            <h1 className="text-3xl font-bold">{meal.foodName}</h1>
-            <p className="text-gray-600 font-medium">Chef: {meal.chefName}</p>
+            <h2 className="text-3xl font-bold">{meal.foodName}</h2>
+
+            <p className="text-gray-600">
+              Chef: {meal.chefName} ({meal.chefId})
+            </p>
+
             <p className="text-gray-800 font-semibold text-xl flex items-center">
               Price: <FaDollarSign />
               {meal.price}
             </p>
-            <p className="text-yellow-500 font-medium">
-              Rating: ★ {meal.rating}
+
+            <p className="text-yellow-500 font-medium flex items-center space-x-1">
+              <span>Rating :</span> <IoMdStar /> {meal.rating}
             </p>
+
             <p className="text-gray-600">
               Delivery Area: {meal.deliveryArea?.join(", ")}
             </p>
+
             <p className="text-gray-600">
               Estimated Delivery Time: {meal.estimatedDeliveryTime}
             </p>
+
             <p className="text-gray-600">
               Chef's Experience: {meal.chefExperience}
             </p>
+
             <p className="text-gray-700">
               <span className="font-semibold">Ingredients: </span>
               {meal.ingredients?.join(", ")}
             </p>
-            <p className="text-gray-600 font-medium">
-              Chef Id: ( {meal.chefId} )
-            </p>
 
             <button
-              onClick={() => navigate(`/order/${meal._id}`)}
-              className="px-6 py-2 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition"
+              onClick={handleAddFavorite}
+              className="btn btn-outline btn-success mt-3"
             >
-              Order Now
+              <MdFavorite /> Add to Favorite
             </button>
           </div>
         </div>
@@ -115,37 +144,58 @@ const MealDetails = () => {
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-semibold mb-4">Reviews</h2>
 
+          <div className="flex items-center gap-1 my-2">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button
+                key={star}
+                type="button"
+                onClick={() => setRating(star)}
+                className={`text-4xl ${
+                  star <= rating ? "text-yellow-500" : "text-gray-300"
+                }`}
+              >
+                ★
+              </button>
+            ))}
+          </div>
+
+          <p className="text-sm text-gray-500">
+            Selected Rating: {rating || "None"}
+          </p>
+
           {/* Add Review */}
-          <div className="mb-6">
+          <div className="my-6">
             <textarea
-              value={reviewText}
-              onChange={(e) => setReviewText(e.target.value)}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
               placeholder="Write your review..."
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="textarea textarea-bordered w-full"
             />
-            <button
-              onClick={handleAddReview}
-              className="mt-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
-            >
-              Submit Review
+            <button onClick={handleAddReview} className="btn btn-success mt-2">
+              Give Review
             </button>
           </div>
 
-          {/* List Reviews */}
+          {/* Review List */}
           {reviews.length === 0 ? (
-            <p className="text-gray-500">
-              No reviews yet. Be the first to review!
-            </p>
+            <p className="text-gray-500">No reviews yet.</p>
           ) : (
             <ul className="space-y-4">
-              {reviews.map((rev, idx) => (
-                <li key={idx} className="border-b border-gray-200 pb-2">
-                  <p className="font-semibold">
-                    {rev.user}{" "}
-                    <span className="text-yellow-500">★ {rev.rating}</span>
-                  </p>
-                  <p className="text-gray-700">{rev.comment}</p>
-                  <p className="text-gray-400 text-xs">
+              {reviews.map((rev) => (
+                <li key={rev._id} className="border-b pb-3">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={rev.reviewerImage}
+                      alt="user"
+                      className="w-10 h-10 rounded-full"
+                    />
+                    <div>
+                      <p className="font-semibold">{rev.reviewerName}</p>
+                      <p className="text-yellow-500">★ {rev.rating}</p>
+                    </div>
+                  </div>
+                  <p className="mt-2">{rev.comment}</p>
+                  <p className="text-xs text-gray-400">
                     {new Date(rev.date).toLocaleDateString()}
                   </p>
                 </li>
