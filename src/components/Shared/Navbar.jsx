@@ -5,6 +5,7 @@ import logo from "../../assets/images/logo.png";
 import { ShoppingCart } from "lucide-react";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
+import { FaUser } from "react-icons/fa";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -77,7 +78,7 @@ const Navbar = () => {
       <header className="w-full sticky top-0 z-50 bg-white shadow-sm">
         {/* Top Bar */}
         <div className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-center text-sm py-2">
-          Get free delivery on orders over ৳1000
+          Get free delivery on orders over $1000
         </div>
 
         {/* Main Navbar */}
@@ -124,14 +125,29 @@ const Navbar = () => {
                   </Link>
                 </>
               ) : (
-                <button
-                  onClick={handleLogOut}
-                  className="px-4 py-2 bg-red-500 text-white cursor-pointer"
-                >
-                  Logout
-                </button>
+                <>
+                  <button
+                    onClick={handleLogOut}
+                    className="px-4 py-2 bg-red-500 text-white cursor-pointer"
+                  >
+                    Logout
+                  </button>
+                  <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer">
+                    {user?.photoURL ? (
+                      <Link to="/dashboard/my-profile">
+                        <img
+                          src={user.photoURL}
+                          alt="profile"
+                          className="w-full h-full object-cover rounded-full"
+                        />
+                      </Link>
+                    ) : (
+                      <FaUser className="text-gray-600" />
+                    )}
+                  </div>
+                </>
               )}
-              <Link
+              {/* <Link
                 // to="/cart"
                 className="relative"
               >
@@ -139,7 +155,7 @@ const Navbar = () => {
                 <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full px-1">
                   0
                 </span>
-              </Link>
+              </Link> */}
             </div>
 
             {/* Mobile Menu Button */}

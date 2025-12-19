@@ -43,6 +43,8 @@ const CreateMeal = () => {
 
   // Form submit
   const onSubmit = async (data) => {
+    // console.log(data);
+
     setLoading(true);
 
     try {
@@ -65,6 +67,7 @@ const CreateMeal = () => {
         price: parseFloat(data.price),
         rating: parseFloat(data.rating),
         ingredients: data.ingredients.split(",").map((item) => item.trim()),
+        deliveryArea: data.deliveryArea.split(",").map((item) => item.trim()),
         estimatedDeliveryTime: data.deliveryTime,
         chefExperience: data.chefExperience,
         chefId,
@@ -237,7 +240,7 @@ const CreateMeal = () => {
           </div>
 
           {/*Image */}
-          <div className="md:col-span-2">
+          <div>
             <label className="label">Food Image</label>
             <input
               type="file"
@@ -252,6 +255,22 @@ const CreateMeal = () => {
                 alt="preview"
                 className="mt-4 h-40 rounded-lg object-cover"
               />
+            )}
+          </div>
+
+          <div>
+            <label className="label">Delivery Area (comma separated)</label>
+            <textarea
+              {...register("deliveryArea", {
+                required: "Delivery Area is required",
+              })}
+              className="textarea textarea-bordered w-full"
+              placeholder="Uttara, Badda etc"
+            />
+            {errors.deliveryArea && (
+              <span className="text-red-500">
+                {errors.deliveryArea.message}
+              </span>
             )}
           </div>
 

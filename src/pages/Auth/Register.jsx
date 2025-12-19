@@ -116,9 +116,9 @@ const Register = () => {
     }
   };
 
-  // if (loading) {
-  //   return <Loading />;
-  // }
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <section className="py-24 flex items-center justify-center px-4">
