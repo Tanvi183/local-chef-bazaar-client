@@ -16,17 +16,26 @@ const AuthProvider = ({ children }) => {
   // user registation function
   const registerUser = (email, password) => {
     setLoading(true);
-    return createUserWithEmailAndPassword(auth, email, password);
+    try {
+      return createUserWithEmailAndPassword(auth, email, password);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const updateUserProfile = (profile) => {
     return updateProfile(auth.currentUser, profile);
   };
 
-  // user signIn function
-  const signInUser = (email, password) => {
+  // Login
+  const signInUser = async (email, password) => {
     setLoading(true);
-    return signInWithEmailAndPassword(auth, email, password);
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      return result;
+    } finally {
+      setLoading(false);
+    }
   };
 
   // SignOut

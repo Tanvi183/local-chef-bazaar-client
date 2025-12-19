@@ -56,59 +56,89 @@ const RoleRequests = () => {
 
   return (
     <div className="mx-10">
-      <h1 className="text-2xl font-semibold my-6">Manage request</h1>
+      <h1 className="text-2xl font-semibold my-6">Manage Role Requests</h1>
 
       {requests.length === 0 ? (
-        <div className="text-center text-gray-500">
-          No pending role requests
-        </div>
+        <p className="text-center text-gray-500">No role requests found</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {requests.map((req) => (
-            <div
-              key={req._id}
-              className="card bg-base-100 shadow-md hover:shadow-lg transition"
-            >
-              <div className="card-body space-y-3">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <FaUser />
-                  <span className="font-medium">{req.userName}</span>
-                </div>
+        <div className="overflow-x-auto bg-base-100 shadow rounded-lg">
+          <table className="table table-zebra w-full">
+            <thead className="bg-base-200">
+              <tr>
+                <th>#</th>
+                <th>User Name</th>
+                <th>User Email</th>
+                <th>Request Type</th>
+                <th>Status</th>
+                <th>Request Time</th>
+                <th className="text-center">Action</th>
+              </tr>
+            </thead>
 
-                <div className="space-x-2">
-                  <span className="text-sm text-gray-500">
-                    Requested Role :
-                  </span>
-                  <div className="badge badge-info">{req.requestType}</div>
-                </div>
+            <tbody>
+              {requests.map((req, index) => {
+                const isDisabled = req.requestStatus !== "pending";
 
-                <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <FaClock />
-                  <span>
-                    {req.requestTime
-                      ? new Date(req.requestTime).toLocaleString()
-                      : "N/A"}
-                  </span>
-                </div>
+                return (
+                  <tr key={req._id}>
+                    <td>{index + 1}</td>
 
-                <div className="card-actions justify-end pt-3">
-                  <button
-                    onClick={() => handleApprove(req._id)}
-                    className="btn btn-success btn-sm"
-                  >
-                    Approve
-                  </button>
+                    <td className="font-medium">{req.userName}</td>
 
-                  <button
-                    onClick={() => handleReject(req._id)}
-                    className="btn btn-error btn-sm"
-                  >
-                    Reject
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+                    <td className="text-gray-600">{req.userEmail}</td>
+
+                    <td>
+                      <span
+                        className={`badge ${
+                          req.requestType === "admin"
+                            ? "badge-warning"
+                            : "badge-info"
+                        }`}
+                      >
+                        {req.requestType}
+                      </span>
+                    </td>
+
+                    <td>
+                      <span
+                        className={`badge ${
+                          req.requestStatus === "approved"
+                            ? "badge-success"
+                            : req.requestStatus === "rejected"
+                            ? "badge-error"
+                            : "badge-ghost"
+                        }`}
+                      >
+                        {req.requestStatus}
+                      </span>
+                    </td>
+
+                    <td className="text-sm">
+                      {new Date(req.requestTime).toLocaleString()}
+                    </td>
+
+                    <td className="text-center space-x-2">
+                      <button
+                        onClick={() => handleApprove(req._id)}
+                        disabled={isDisabled}
+                        className="btn btn-success btn-xs"
+                      >
+                        Accept
+                      </button>
+
+                      <button
+                        onClick={() => handleReject(req._id)}
+                        disabled={isDisabled}
+                        className="btn btn-error btn-xs"
+                      >
+                        Reject
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

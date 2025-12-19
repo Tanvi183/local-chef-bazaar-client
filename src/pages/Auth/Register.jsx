@@ -116,9 +116,9 @@ const Register = () => {
     }
   };
 
-  if (loading) {
-    return <Loading />;
-  }
+  // if (loading) {
+  //   return <Loading />;
+  // }
 
   return (
     <section className="py-24 flex items-center justify-center px-4">
@@ -282,9 +282,10 @@ const Register = () => {
 
               <button
                 type="submit"
+                disabled={loading}
                 className="py-3 px-8 bg-lime-600 text-white hover:bg-lime-700 font-semibold transition"
               >
-                Register
+                {loading ? "Signing in..." : "Sign In"}
               </button>
             </form>
 

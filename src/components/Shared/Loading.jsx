@@ -3,15 +3,9 @@ import loadingAnimation from "../../assets/lottie/loading.json";
 
 const Loading = () => {
   return (
-    <div className="flex flex-col items-center justify-center gap-5">
-      <div className="max-w-sm relative">
-        <Lottie
-          options={{
-            animationData: loadingAnimation,
-            autoplay: true,
-            loop: true,
-          }}
-        ></Lottie>
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="w-64">
+        <Lottie animationData={loadingAnimation} loop={true} />
       </div>
     </div>
   );
