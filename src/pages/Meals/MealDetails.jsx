@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FaDollarSign } from "react-icons/fa";
@@ -16,6 +16,7 @@ const MealDetails = () => {
   const { id } = useParams();
   const { user } = useAuth();
   const axiosInstance = useAxios();
+  const navigate = useNavigate();
 
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState();
@@ -85,6 +86,16 @@ const MealDetails = () => {
     }
   };
 
+  // order button handle
+  const handleOrder = () => {
+    if (!user) {
+      toast.error("Please login to place an order");
+      return;
+    }
+
+    navigate(`/order/${meal._id}`);
+  };
+
   if (isLoading) return <Loading />;
 
   return (
@@ -131,12 +142,18 @@ const MealDetails = () => {
               {meal.ingredients?.join(", ")}
             </p>
 
-            <button
-              onClick={handleAddFavorite}
-              className="btn btn-outline btn-success mt-3"
-            >
-              <MdFavorite /> Add to Favorite
-            </button>
+            <div className="flex gap-3 mt-4">
+              <button
+                onClick={handleAddFavorite}
+                className="btn btn-outline btn-success"
+              >
+                <MdFavorite /> Add to Favorite
+              </button>
+
+              <button onClick={handleOrder} className="btn btn-primary">
+                Order Now
+              </button>
+            </div>
           </div>
         </div>
 
@@ -209,3 +226,5 @@ const MealDetails = () => {
 };
 
 export default MealDetails;
+
+// in this page add order button that clicked than go to order page.

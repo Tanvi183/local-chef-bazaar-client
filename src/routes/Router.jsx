@@ -18,6 +18,8 @@ import FraudRoute from "./FraudRoute";
 import MealDetails from "../pages/Meals/MealDetails";
 import MyReviews from "../pages/Dashboard/My Reviews/MyReviews";
 import FavoritesPage from "../pages/Dashboard/FavoritesPage/FavoritesPage";
+import OrderPage from "../pages/Dashboard/OrderPage/OrderPage";
+import MyOrders from "../pages/Dashboard/MyOrders/MyOrders";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +50,14 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      {
+        path: "/order/:id",
+        element: (
+          <PrivateRoute>
+            <OrderPage />
+          </PrivateRoute>
+        ),
+      },
     ],
   },
 
@@ -74,6 +84,10 @@ const router = createBrowserRouter([
       {
         path: "my-favorites",
         element: <FavoritesPage />,
+      },
+      {
+        path: "my-orders",
+        element: <MyOrders />,
       },
 
       // Admin Only Access

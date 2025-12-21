@@ -9,7 +9,7 @@ import {
   MdFavorite,
 } from "react-icons/md";
 import useRole from "../hooks/useRole";
-import { GiMeal } from "react-icons/gi";
+import { GiMeal, GiFoodTruck } from "react-icons/gi";
 import { FaComment } from "react-icons/fa6";
 
 const DashboardLayout = () => {
@@ -241,6 +241,25 @@ const DashboardLayout = () => {
                   >
                     <MdFavorite />
                     <span className="is-drawer-close:hidden">My Favorites</span>
+                  </NavLink>
+                </li>
+
+                <li>
+                  <NavLink
+                    to="/dashboard/my-orders"
+                    end
+                    data-tip="My Orders"
+                    className={({ isActive }) =>
+                      `
+      is-drawer-close:tooltip 
+      is-drawer-close:tooltip-right
+      flex items-center gap-3
+      ${isActive ? "bg-primary text-white" : ""}
+      `
+                    }
+                  >
+                    <GiFoodTruck />
+                    <span className="is-drawer-close:hidden">My Orders</span>
                   </NavLink>
                 </li>
               </>
