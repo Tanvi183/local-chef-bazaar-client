@@ -94,7 +94,11 @@ const Meals = () => {
                 />
 
                 <div className="p-4 space-y-2">
-                  <h3 className="font-semibold text-lg">{meal.foodName}</h3>
+                  <h3 className="font-semibold text-lg">{meal.chefName}</h3>
+
+                  <p className="text-sm text-gray-500">
+                    Chef ID: {meal.chefId}
+                  </p>
 
                   <div className="flex justify-between text-sm">
                     <span className="flex items-center gap-1">
@@ -104,6 +108,10 @@ const Meals = () => {
                       ★ {meal.rating || 0}
                     </span>
                   </div>
+
+                  <p className="text-sm text-gray-600">
+                    Delivery Area: {meal.deliveryArea?.join(", ")}
+                  </p>
 
                   <button
                     onClick={() => handleSeeDetails(meal._id)}
@@ -121,7 +129,7 @@ const Meals = () => {
           <button
             disabled={page === 1}
             onClick={() => setPage(page - 1)}
-            className="px-4 py-2 border rounded disabled:opacity-50 cursor-pointer"
+            className="px-4 py-2 border rounded disabled:opacity-50 cursor-pointer hover:bg-lime-600"
           >
             Prev
           </button>
@@ -141,7 +149,7 @@ const Meals = () => {
           <button
             disabled={page === totalPages}
             onClick={() => setPage(page + 1)}
-            className="px-4 py-2 border rounded disabled:opacity-50 cursor-pointer"
+            className="px-4 py-2 border rounded disabled:opacity-50 cursor-pointer disabled:hover:bg-lime-600"
           >
             Next
           </button>
