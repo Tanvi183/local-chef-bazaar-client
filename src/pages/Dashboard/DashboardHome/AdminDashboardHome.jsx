@@ -16,14 +16,14 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 import useTitle from "../../../hooks/useTitle";
-import useAxios from "../../../hooks/useAxios";
 import Loading from "../../../components/Shared/Loading";
 import useRole from "../../../hooks/useRole";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const AdminDashboardHome = () => {
   useTitle("Admin Dashboard");
   const { role } = useRole();
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxiosSecure();
 
   const {
     data = {},

@@ -1,10 +1,10 @@
 import React from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
-import useAxios from "../../../hooks/useAxios";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ManageUsers = () => {
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxiosSecure();
   const queryClient = useQueryClient();
 
   // Fetch all users

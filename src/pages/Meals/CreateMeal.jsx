@@ -3,14 +3,14 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useTitle from "../../hooks/useTitle";
 import useAuth from "../../hooks/useAuth";
-import useAxios from "../../hooks/useAxios";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const CreateMeal = () => {
   useTitle("Add Meal");
   const { user } = useAuth();
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxiosSecure();
 
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);

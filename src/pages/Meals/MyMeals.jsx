@@ -3,11 +3,11 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import UpdateMealModal from "./UpdateMealModal";
 import useAuth from "../../hooks/useAuth";
-import useAxios from "../../hooks/useAxios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Meals = () => {
   const { user } = useAuth();
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxiosSecure();
   const queryClient = useQueryClient();
 
   const [selectedMeal, setSelectedMeal] = useState(null);

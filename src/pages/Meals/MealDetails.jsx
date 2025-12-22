@@ -5,17 +5,17 @@ import { FaDollarSign } from "react-icons/fa";
 import Loading from "../../components/Shared/Loading";
 import useTitle from "../../hooks/useTitle";
 import useAuth from "../../hooks/useAuth";
-import useAxios from "../../hooks/useAxios";
 import toast from "react-hot-toast";
 import { IoMdStar } from "react-icons/io";
 import { MdFavorite } from "react-icons/md";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const MealDetails = () => {
   useTitle("Meal Details");
 
   const { id } = useParams();
   const { user } = useAuth();
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxiosSecure();
   const navigate = useNavigate();
 
   const [comment, setComment] = useState("");

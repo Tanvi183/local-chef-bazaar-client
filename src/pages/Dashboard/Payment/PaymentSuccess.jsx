@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import Swal from "sweetalert2";
-import useAxios from "../../../hooks/useAxios";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const PaymentSuccess = () => {
   const navigate = useNavigate();
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxiosSecure();
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get("session_id");
 

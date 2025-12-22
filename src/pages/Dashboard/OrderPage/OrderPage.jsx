@@ -3,16 +3,16 @@ import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useTitle from "../../../hooks/useTitle";
-import useAxios from "../../../hooks/useAxios";
 import useAuth from "../../../hooks/useAuth";
 import Loading from "../../../components/Shared/Loading";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const OrderPage = () => {
   useTitle("Confirm Order");
 
   const { id } = useParams();
   const { user } = useAuth();
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxiosSecure();
   const navigate = useNavigate();
 
   const {

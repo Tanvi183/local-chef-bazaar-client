@@ -2,12 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import useAuth from "../../../hooks/useAuth";
-import useAxios from "../../../hooks/useAxios";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const MyReviews = () => {
   const { user } = useAuth();
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxiosSecure();
   const [editingReview, setEditingReview] = useState(null);
 
   // user wise review fetch

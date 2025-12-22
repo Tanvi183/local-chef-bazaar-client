@@ -1,14 +1,14 @@
 import React from "react";
 import useTitle from "../../../hooks/useTitle";
 import { useQuery } from "@tanstack/react-query";
-import useAxios from "../../../hooks/useAxios";
 import toast from "react-hot-toast";
 import { FaUser, FaClock } from "react-icons/fa";
 import Loading from "../../../components/Shared/Loading";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const RoleRequests = () => {
   useTitle("Role Requests");
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxiosSecure();
 
   const {
     data: requests = [],

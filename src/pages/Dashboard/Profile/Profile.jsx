@@ -3,13 +3,13 @@ import useAuth from "../../../hooks/useAuth";
 import { FaUserAlt, FaEnvelope, FaRegAddressCard } from "react-icons/fa";
 import useTitle from "../../../hooks/useTitle";
 import { useQuery } from "@tanstack/react-query";
-import useAxios from "../../../hooks/useAxios";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Profile = () => {
   useTitle("Profile");
   const { user } = useAuth();
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxiosSecure();
 
   const { data: profileData = [] } = useQuery({
     queryKey: ["users", user?.email],

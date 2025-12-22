@@ -2,15 +2,15 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import useTitle from "../../../hooks/useTitle";
 import useAuth from "../../../hooks/useAuth";
-import useAxios from "../../../hooks/useAxios";
 import Loading from "../../../components/Shared/Loading";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ChefOrders = () => {
   useTitle("Order Requests");
 
   const { user } = useAuth();
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxiosSecure();
 
   const { data: profileData = [] } = useQuery({
     queryKey: ["users", user?.email],

@@ -9,13 +9,13 @@ import {
 } from "react-icons/fa";
 import useTitle from "../../../hooks/useTitle";
 import useAuth from "../../../hooks/useAuth";
-import useAxios from "../../../hooks/useAxios";
 import Loading from "../../../components/Shared/Loading";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ChefDashboardHome = () => {
   useTitle("Chef Dashboard");
   const { user } = useAuth();
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxiosSecure();
 
   const { data: profileData = {}, isLoading: isProfileLoading } = useQuery({
     queryKey: ["users", user?.email],

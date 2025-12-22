@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-import useAxios from "../../hooks/useAxios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const UpdateMealModal = ({ meal, onClose, onUpdated }) => {
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxiosSecure();
 
   // console.log(meal);
 
