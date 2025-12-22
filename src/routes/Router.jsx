@@ -20,6 +20,8 @@ import MyReviews from "../pages/Dashboard/My Reviews/MyReviews";
 import FavoritesPage from "../pages/Dashboard/FavoritesPage/FavoritesPage";
 import OrderPage from "../pages/Dashboard/OrderPage/OrderPage";
 import MyOrders from "../pages/Dashboard/MyOrders/MyOrders";
+import ChefOrders from "../pages/Dashboard/OrderRequests/OrderRequests";
+import PaymentSuccess from "../pages/Dashboard/Payment/PaymentSuccess";
 
 const router = createBrowserRouter([
   {
@@ -89,6 +91,10 @@ const router = createBrowserRouter([
         path: "my-orders",
         element: <MyOrders />,
       },
+      {
+        path: "payment-success",
+        element: <PaymentSuccess />,
+      },
 
       // Admin Only Access
       {
@@ -124,6 +130,14 @@ const router = createBrowserRouter([
         element: (
           <ChefRoute>
             <MyMeals />
+          </ChefRoute>
+        ),
+      },
+      {
+        path: "order-requests",
+        element: (
+          <ChefRoute>
+            <ChefOrders />
           </ChefRoute>
         ),
       },

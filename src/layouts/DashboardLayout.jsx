@@ -200,6 +200,25 @@ const DashboardLayout = () => {
                     <span className="is-drawer-close:hidden"> My Meals</span>
                   </NavLink>
                 </li>
+
+                <li>
+                  <NavLink
+                    to="/dashboard/order-requests"
+                    end
+                    data-tip="Order requests"
+                    className={({ isActive }) =>
+                      `
+      is-drawer-close:tooltip 
+      is-drawer-close:tooltip-right
+      flex items-center gap-3
+      ${isActive ? "bg-primary text-white" : ""}
+      `
+                    }
+                  >
+                    <GiFoodTruck />
+                    <span className="is-drawer-close:hidden">Order requests</span>
+                  </NavLink>
+                </li>
               </>
             )}
 
