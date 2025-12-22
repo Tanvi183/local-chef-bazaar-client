@@ -20,7 +20,10 @@ const Forbidden = () => {
         Please contact the administrator if you believe this is an error.
       </p>
       <div className="my-3 space-x-3">
-        <Link to="/" className="btn btn-primary text-black">
+        <Link
+          to="/"
+          className="btn btn-primary bg-lime-600 text-white hover:bg-lime-700 font-semibold transition"
+        >
           {" "}
           Go to Home
         </Link>

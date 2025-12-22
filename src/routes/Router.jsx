@@ -23,10 +23,12 @@ import MyOrders from "../pages/Dashboard/MyOrders/MyOrders";
 import ChefOrders from "../pages/Dashboard/OrderRequests/OrderRequests";
 import PaymentSuccess from "../pages/Dashboard/Payment/PaymentSuccess";
 import PaymentHistory from "../pages/Dashboard/Payment/PaymentHistory";
+import ErrorPage from "../components/Shared/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    errorElement: <ErrorPage />,
     element: <MainLayout />,
     children: [
       {
@@ -66,6 +68,7 @@ const router = createBrowserRouter([
 
   {
     path: "/dashboard",
+    errorElement: <ErrorPage />,
     element: (
       <PrivateRoute>
         <DashboardLayout></DashboardLayout>
