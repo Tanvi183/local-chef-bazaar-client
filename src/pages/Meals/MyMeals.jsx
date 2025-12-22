@@ -52,7 +52,7 @@ const Meals = () => {
   return (
     <div className="mx-10">
       <h1 className="text-2xl font-semibold my-6">My Meals</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
         {meals.map((meal) => (
           <div key={meal._id} className="card bg-base-200 shadow-md">
             <figure>

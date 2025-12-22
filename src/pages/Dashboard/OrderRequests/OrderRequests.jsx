@@ -83,7 +83,7 @@ const ChefOrders = () => {
       {orders.length === 0 ? (
         <p className="text-center text-gray-500">No orders found</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-10">
           {orders.map((order) => {
             const isCancelled = order.orderStatus === "cancelled";
             const isAccepted = order.orderStatus === "accepted";
