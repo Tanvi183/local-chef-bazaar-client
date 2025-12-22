@@ -61,7 +61,7 @@ const MyOrders = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <div className="mx-10">
+    <div className="mx-10 mb-10">
       <h1 className="text-2xl font-semibold my-6">My Orders</h1>
 
       {orders.length === 0 ? (

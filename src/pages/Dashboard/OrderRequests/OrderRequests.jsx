@@ -1,6 +1,5 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import toast from "react-hot-toast";
 import useTitle from "../../../hooks/useTitle";
 import useAuth from "../../../hooks/useAuth";
 import useAxios from "../../../hooks/useAxios";

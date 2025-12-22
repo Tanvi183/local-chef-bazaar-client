@@ -1,6 +1,13 @@
 import React from "react";
 import { Link, NavLink, Outlet } from "react-router";
-import { FaUserAlt, FaUsersCog } from "react-icons/fa";
+import {
+  FaUserAlt,
+  FaUsersCog,
+  FaStar,
+  FaShoppingCart,
+  FaMoneyBillWave,
+  FaTruck,
+} from "react-icons/fa";
 import logoImg from "../assets/images/logo.png";
 import {
   MdDashboardCustomize,
@@ -9,8 +16,7 @@ import {
   MdFavorite,
 } from "react-icons/md";
 import useRole from "../hooks/useRole";
-import { GiMeal, GiFoodTruck } from "react-icons/gi";
-import { FaComment } from "react-icons/fa6";
+import { GiMeal } from "react-icons/gi";
 
 const DashboardLayout = () => {
   const { role, status } = useRole();
@@ -215,8 +221,10 @@ const DashboardLayout = () => {
       `
                     }
                   >
-                    <GiFoodTruck />
-                    <span className="is-drawer-close:hidden">Order requests</span>
+                    <FaTruck />
+                    <span className="is-drawer-close:hidden">
+                      Order requests
+                    </span>
                   </NavLink>
                 </li>
               </>
@@ -239,7 +247,7 @@ const DashboardLayout = () => {
       `
                     }
                   >
-                    <FaComment />
+                    <FaStar />
                     <span className="is-drawer-close:hidden">My Reviews</span>
                   </NavLink>
                 </li>
@@ -277,8 +285,29 @@ const DashboardLayout = () => {
       `
                     }
                   >
-                    <GiFoodTruck />
+                    <FaShoppingCart />
                     <span className="is-drawer-close:hidden">My Orders</span>
+                  </NavLink>
+                </li>
+
+                <li>
+                  <NavLink
+                    to="/dashboard/payment-history"
+                    end
+                    data-tip="Payment History"
+                    className={({ isActive }) =>
+                      `
+      is-drawer-close:tooltip 
+      is-drawer-close:tooltip-right
+      flex items-center gap-3
+      ${isActive ? "bg-primary text-white" : ""}
+      `
+                    }
+                  >
+                    <FaMoneyBillWave />
+                    <span className="is-drawer-close:hidden">
+                      Payment History
+                    </span>
                   </NavLink>
                 </li>
               </>

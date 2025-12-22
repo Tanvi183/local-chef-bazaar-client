@@ -22,6 +22,7 @@ import OrderPage from "../pages/Dashboard/OrderPage/OrderPage";
 import MyOrders from "../pages/Dashboard/MyOrders/MyOrders";
 import ChefOrders from "../pages/Dashboard/OrderRequests/OrderRequests";
 import PaymentSuccess from "../pages/Dashboard/Payment/PaymentSuccess";
+import PaymentHistory from "../pages/Dashboard/Payment/PaymentHistory";
 
 const router = createBrowserRouter([
   {
@@ -94,6 +95,11 @@ const router = createBrowserRouter([
       {
         path: "payment-success",
         element: <PaymentSuccess />,
+      },
+
+      {
+        path: "payment-history",
+        element: <PaymentHistory />,
       },
 
       // Admin Only Access
