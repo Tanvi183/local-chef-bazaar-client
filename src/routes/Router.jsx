@@ -4,6 +4,7 @@ import Home from "../pages/Home/Home";
 import Meals from "../pages/Meals/Meals";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
+import Contact from "../pages/Contact/Contact";
 import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
 import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <Register />,
+      },
+      {
+        path: "contact",
+        element: <Contact />,
       },
       {
         path: "meals/:id",
