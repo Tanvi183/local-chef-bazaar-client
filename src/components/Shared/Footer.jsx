@@ -74,6 +74,15 @@ const Footer = () => {
                 </li>
                 <li>
                   <NavLink 
+                    to="/blogs" 
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-300 text-sm flex items-center group"
+                  >
+                    <span className="w-2 h-2 bg-green-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                    Blogs
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink 
                     to="/about" 
                     className="text-gray-300 hover:text-green-400 transition-colors duration-300 text-sm flex items-center group"
                   >

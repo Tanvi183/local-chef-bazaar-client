@@ -5,6 +5,7 @@ import Meals from "../../components/Home/Meals/Meals";
 import OfferSection from "../../components/Home/OfferSection";
 import CustomerReviews from "../../components/Home/CustomerReviews";
 import FAQ from "../../components/Home/FAQ";
+import BlogSection from "../../components/Home/BlogSection";
 import useTitle from "../../hooks/useTitle";
 import OurTeams from "../../components/Shared/OurTeams";
 import OurValues from "../../components/Shared/OurValues";
@@ -35,6 +36,9 @@ const Home = () => {
 
       {/* FAQ */}
       <FAQ></FAQ>
+
+      {/* Blog Section */}
+      <BlogSection></BlogSection>
 
       {/* teams */}
       <OurTeams></OurTeams>

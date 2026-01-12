@@ -6,6 +6,8 @@ import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
 import Contact from "../pages/Contact/Contact";
 import About from "../pages/About/About";
+import Blogs from "../pages/Blogs/Blogs";
+import BlogDetails from "../pages/Blogs/BlogDetails";
 import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
 import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
@@ -56,6 +58,14 @@ const router = createBrowserRouter([
       {
         path: "about",
         element: <About />,
+      },
+      {
+        path: "blogs",
+        element: <Blogs />,
+      },
+      {
+        path: "blogs/:id",
+        element: <BlogDetails />,
       },
       {
         path: "meals/:id",
