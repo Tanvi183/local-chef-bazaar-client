@@ -7,8 +7,8 @@ The platform empowers chefs to earn from their kitchen and allows users to easil
 
 ## 🔗 Live Website
 
-👉 **Client:** https://your-client-live-link.com  
-👉 **Server:** https://your-server-live-link.com
+👉 **Client:** [Frontend Side](https://local-chef-bazaar-3f85a.web.app/)  
+👉 **Server:** [Backend Link](https://local-chef-bazaar-server-flax.vercel.app/)
 
 ---
 
