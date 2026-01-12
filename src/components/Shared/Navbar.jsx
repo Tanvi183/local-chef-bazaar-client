@@ -1,15 +1,29 @@
 import { Link, NavLink } from "react-router";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
+import { FaUser, FaSignOutAlt, FaUserAlt } from "react-icons/fa";
 import logo from "../../assets/images/logo.png";
-import { ShoppingCart } from "lucide-react";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
-import { FaUser } from "react-icons/fa";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const { user, SignOut } = useAuth();
+  const dropdownRef = useRef(null);
+  
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setProfileDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const navLinkClass = ({ isActive }) =>
     `nav-link transition ${
@@ -129,36 +143,103 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <button
-                    onClick={handleLogOut}
-                    className="px-4 py-2 bg-red-500 text-white cursor-pointer"
-                  >
-                    Logout
-                  </button>
-                  <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer">
-                    {user?.photoURL ? (
-                      <Link to="/dashboard/my-profile">
+                  {/* Profile Dropdown */}
+                  <div className="relative" ref={dropdownRef}>
+                    <button
+                      onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                      className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-green-400 transition-all duration-300"
+                    >
+                      {user?.photoURL ? (
                         <img
                           src={user.photoURL}
                           alt="profile"
                           className="w-full h-full object-cover rounded-full"
                         />
-                      </Link>
-                    ) : (
-                      <FaUser className="text-gray-600" />
+                      ) : (
+                        <FaUser className="text-gray-600" />
+                      )}
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    {profileDropdownOpen && (
+                      <div className="absolute right-0 mt-2 w-56 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-200/50 z-50">
+                        {/* User Info */}
+                        <div className="px-4 py-3 border-b border-gray-100">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gray-100">
+                              {user?.photoURL ? (
+                                <img
+                                  src={user.photoURL}
+                                  alt="profile"
+                                  className="w-full h-full object-cover rounded-full"
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-gradient-to-br from-green-400 to-lime-500 rounded-full flex items-center justify-center">
+                                  <FaUser className="text-white text-sm" />
+                                </div>
+                              )}
+                            </div>
+                            <div>
+                              <p className="font-semibold text-gray-800 text-sm">
+                                {user?.displayName || "User"}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {user?.email}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Menu Items */}
+                        <div className="py-2">
+                          {/* Profile Link */}
+                          <Link
+                            to="/dashboard/my-profile"
+                            onClick={() => setProfileDropdownOpen(false)}
+                            className="flex items-center gap-3 px-4 py-3 hover:bg-green-50 transition-colors duration-300 group"
+                          >
+                            <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors duration-300">
+                              <FaUserAlt className="text-blue-600 text-sm" />
+                            </div>
+                            <span className="text-gray-700 font-medium">My Profile</span>
+                          </Link>
+
+                          {/* Dashboard Link */}
+                          <Link
+                            to="/dashboard"
+                            onClick={() => setProfileDropdownOpen(false)}
+                            className="flex items-center gap-3 px-4 py-3 hover:bg-green-50 transition-colors duration-300 group"
+                          >
+                            <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors duration-300">
+                              <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+                              </svg>
+                            </div>
+                            <span className="text-gray-700 font-medium">Dashboard</span>
+                          </Link>
+
+                          {/* Divider */}
+                          <div className="border-t border-gray-100 my-2"></div>
+
+                          {/* Logout Button */}
+                          <button
+                            onClick={() => {
+                              setProfileDropdownOpen(false);
+                              handleLogOut();
+                            }}
+                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-colors duration-300 group text-red-600 hover:text-red-700"
+                          >
+                            <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors duration-300">
+                              <FaSignOutAlt className="text-red-600 text-sm" />
+                            </div>
+                            <span className="font-medium">Sign Out</span>
+                          </button>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </>
               )}
-              {/* <Link
-                // to="/cart"
-                className="relative"
-              >
-                <ShoppingCart className="text-xl text-gray-700" />
-                <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full px-1">
-                  0
-                </span>
-              </Link> */}
             </div>
 
             {/* Mobile Menu Button */}
@@ -187,7 +268,31 @@ const Navbar = () => {
                   </Link>
                 </>
               ) : (
-                <button className="text-left text-red-500">Logout</button>
+                <div className="space-y-2">
+                  <Link 
+                    to="/dashboard/my-profile" 
+                    className="block text-left text-gray-700 hover:text-green-600 transition-colors duration-300"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    My Profile
+                  </Link>
+                  <Link 
+                    to="/dashboard" 
+                    className="block text-left text-gray-700 hover:text-green-600 transition-colors duration-300"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                  <button 
+                    onClick={() => {
+                      setMenuOpen(false);
+                      handleLogOut();
+                    }}
+                    className="block text-left text-red-500 hover:text-red-600 transition-colors duration-300"
+                  >
+                    Sign Out
+                  </button>
+                </div>
               )}
             </div>
           </div>
