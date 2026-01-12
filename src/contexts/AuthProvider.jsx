@@ -4,10 +4,14 @@ import { auth } from "../services/firebase.init";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  GoogleAuthProvider,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updateProfile,
 } from "firebase/auth";
+
+const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -38,6 +42,12 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  // Google SignIn
+  const signInWithGoogle = () => {
+    setLoading(true);
+    return signInWithPopup(auth, googleProvider);
+  };
+
   // SignOut
   const SignOut = () => {
     setLoading(true);
@@ -52,7 +62,7 @@ const AuthProvider = ({ children }) => {
 
       if (currentUser) {
         const loggedUser = { email: currentUser.email };
-        fetch("http://localhost:3000/getToken", {
+        fetch("https://local-chef-bazaar-server-flax.vercel.app/getToken", {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -79,6 +89,7 @@ const AuthProvider = ({ children }) => {
     registerUser,
     updateUserProfile,
     signInUser,
+    signInWithGoogle,
     SignOut,
     user,
     loading,
