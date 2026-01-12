@@ -16,15 +16,13 @@ const CustomerReviews = () => {
   // console.log(reviews);
 
   return (
-    <section className="bg-gray-50 py-16">
+    <section className="bg-gray-50 py-20">
       <div className="max-w-7xl mx-auto px-4">
         {/* Heading */}
-        <h3 className="text-3xl font-semibold mb-3 text-center">
+        {/* <h3 className="text-3xl font-semibold capitalize mb-8">Top Dishes</h3> */}
+        <h3 className="text-3xl font-semibold capitalize mb-10">
           What Our Customers Say
         </h3>
-        <p className="text-gray-500 text-center mb-10">
-          Real reviews from real food lovers 🍔
-        </p>
 
         {/* Reviews Grid */}
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

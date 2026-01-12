@@ -38,41 +38,43 @@ const responsive = {
 
 const Categories = () => {
   return (
-    <section className="max-w-7xl mx-auto px-4 py-20">
-      <h3 className="text-3xl font-semibold capitalize mb-10">
-        Best Foods For You
-      </h3>
+    <div className="bg-gray-50 py-20">
+      <section className="max-w-7xl mx-auto px-4">
+        <h3 className="text-3xl font-semibold capitalize mb-10">
+          Best Foods For You
+        </h3>
 
-      <Carousel
-        responsive={responsive}
-        infinite
-        autoPlay
-        autoPlaySpeed={2500}
-        pauseOnHover={false}
-        arrows
-        removeArrowOnDeviceType={["tablet", "mobile"]}
-        containerClass="pb-4 "
-        itemClass="px-3"
-      >
-        {categories.map((item, index) => (
-          <div
-            key={index}
-            className="flex flex-col items-center gap-3 cursor-pointer group"
-          >
-            <div className="w-30 h-30 rounded-full bg-gray-100 flex items-center justify-center transition group-hover:bg-green-100">
-              <img
-                src={item.img}
-                alt={item.name}
-                className="w-30 h-30 object-contain"
-              />
+        <Carousel
+          responsive={responsive}
+          infinite
+          autoPlay
+          autoPlaySpeed={2500}
+          pauseOnHover={false}
+          arrows
+          removeArrowOnDeviceType={["tablet", "mobile"]}
+          containerClass="pb-4 "
+          itemClass="px-3"
+        >
+          {categories.map((item, index) => (
+            <div
+              key={index}
+              className="flex flex-col items-center gap-3 cursor-pointer group"
+            >
+              <div className="w-30 h-30 rounded-full bg-gray-100 flex items-center justify-center transition group-hover:bg-green-100">
+                <img
+                  src={item.img}
+                  alt={item.name}
+                  className="w-30 h-30 object-contain"
+                />
+              </div>
+              <p className="text-sm font-medium group-hover:text-green-600">
+                {item.name}
+              </p>
             </div>
-            <p className="text-sm font-medium group-hover:text-green-600">
-              {item.name}
-            </p>
-          </div>
-        ))}
-      </Carousel>
-    </section>
+          ))}
+        </Carousel>
+      </section>
+    </div>
   );
 };
 

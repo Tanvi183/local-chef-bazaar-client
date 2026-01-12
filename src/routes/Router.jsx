@@ -5,6 +5,7 @@ import Meals from "../pages/Meals/Meals";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
 import Contact from "../pages/Contact/Contact";
+import About from "../pages/About/About";
 import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
 import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "contact",
         element: <Contact />,
+      },
+      {
+        path: "about",
+        element: <About />,
       },
       {
         path: "meals/:id",

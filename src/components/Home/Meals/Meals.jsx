@@ -30,7 +30,7 @@ const Meals = () => {
   // console.log(meals);
 
   return (
-    <section className="bg-gray-50 py-16">
+    <section className="bg-gray-50 py-20">
       <div className="max-w-7xl mx-auto px-4">
         <h3 className="text-3xl font-semibold capitalize mb-8">Top Dishes</h3>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">

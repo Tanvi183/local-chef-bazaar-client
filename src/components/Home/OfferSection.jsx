@@ -38,7 +38,7 @@ const slides = [
 
 const OfferSection = () => {
   return (
-    <section className="bg-[rgb(226,252,255)] bg-opacity-80 py-16">
+    <section className="bg-[rgb(226,252,255)] bg-opacity-80 py-20">
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-10 items-center">
         {/* LEFT SIDE: 1/3 */}
         <div className="flex flex-col items-center text-center lg:col-span-1">

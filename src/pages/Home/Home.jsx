@@ -4,7 +4,10 @@ import Categories from "../../components/Home/Categories";
 import Meals from "../../components/Home/Meals/Meals";
 import OfferSection from "../../components/Home/OfferSection";
 import CustomerReviews from "../../components/Home/CustomerReviews";
+import FAQ from "../../components/Home/FAQ";
 import useTitle from "../../hooks/useTitle";
+import OurTeams from "../../components/Shared/OurTeams";
+import OurValues from "../../components/Shared/OurValues";
 
 const Home = () => {
   useTitle("Home");
@@ -29,6 +32,16 @@ const Home = () => {
 
       {/* custormer review */}
       <CustomerReviews></CustomerReviews>
+
+      {/* FAQ */}
+      <FAQ></FAQ>
+
+      {/* teams */}
+      <OurTeams></OurTeams>
+
+      {/* Values */}
+      <OurValues></OurValues>
+      
     </div>
   );
 };
