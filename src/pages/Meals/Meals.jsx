@@ -5,13 +5,13 @@ import { FaDollarSign, FaSearch } from "react-icons/fa";
 
 import useTitle from "../../hooks/useTitle";
 import useAxios from "../../hooks/useAxios";
-import useAuth from "../../hooks/useAuth";
+// import useAuth from "../../hooks/useAuth";
 import Loading from "../../components/Shared/Loading";
 
 const Meals = () => {
   useTitle("Meals");
 
-  const { user } = useAuth();
+  // const { user } = useAuth();
   const axiosInstance = useAxios();
   const navigate = useNavigate();
 
@@ -34,7 +34,7 @@ const Meals = () => {
     queryKey: ["meals-paginated", page, sortOrder, debouncedSearch],
     queryFn: async () => {
       const res = await axiosInstance.get(
-        `/meals-paginated?page=${page}&limit=${MEAL_PER_PAGE}&sort=${sortOrder}&search=${debouncedSearch}`
+        `/meals-paginated?page=${page}&limit=${MEAL_PER_PAGE}&sort=${sortOrder}&search=${debouncedSearch}`,
       );
       return res.data;
     },
@@ -44,7 +44,8 @@ const Meals = () => {
   const { meals = [], totalPages = 1 } = data;
 
   const handleSeeDetails = (mealId) => {
-    user ? navigate(`/meals/${mealId}`) : navigate("/login");
+    navigate(`/meals/${mealId}`);
+    // user ? navigate(`/meals/${mealId}`) : navigate("/login");
   };
 
   if (isLoading) {
