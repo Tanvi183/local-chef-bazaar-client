@@ -68,6 +68,11 @@ const MealDetails = () => {
 
   // Add Favorite
   const handleAddFavorite = async () => {
+    if (!user) {
+      toast.error("Please login to add favorite");
+      return;
+    }
+
     try {
       const res = await axiosInstance.post("/favorites", {
         userEmail: user.email,
@@ -226,5 +231,3 @@ const MealDetails = () => {
 };
 
 export default MealDetails;
-
-// in this page add order button that clicked than go to order page.

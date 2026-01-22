@@ -56,10 +56,7 @@ const Categories = () => {
           itemClass="px-3"
         >
           {categories.map((item, index) => (
-            <div
-              key={index}
-              className="flex flex-col items-center gap-3 cursor-pointer group"
-            >
+            <div key={index} className="flex flex-col items-center gap-3 group">
               <div className="w-30 h-30 rounded-full bg-gray-100 flex items-center justify-center transition group-hover:bg-green-100">
                 <img
                   src={item.img}
